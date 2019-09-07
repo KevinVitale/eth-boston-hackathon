@@ -57,7 +57,7 @@
 
   .blurb {
     color: #222;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 100;
     padding: 0px 0px 0px;
   } 
@@ -83,7 +83,6 @@
 
   <div class="content">
     <Header/>
-		<hr/>
 
     <p class="blurb">
       Creating an ERC-721 token which is an

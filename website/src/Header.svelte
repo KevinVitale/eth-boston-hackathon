@@ -1,6 +1,6 @@
 <script>
-  let title = "Sell Your LOGN";
-  let subtitles = [""];
+  let title = "";
+  let subtitles = ["Sell Your LOGN"];
 </script>
 
 <style>
@@ -17,7 +17,7 @@
 
   .text h2 {
     color: #aaa;
-    font-weight: 200;
+    font-weight: 300;
     line-height: 0.25;
   }
 </style>
