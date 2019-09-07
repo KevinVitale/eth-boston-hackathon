@@ -1,0 +1,8 @@
+**/compiled.js
+docs
+saved
+scripts
+node_modules
+build
+dapp/dist/**
+api/data/**

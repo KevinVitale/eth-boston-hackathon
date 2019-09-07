@@ -1,0 +1,37 @@
+{
+  "name": "TokenizedAccess",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "",
+  "author": "amaurer",
+  "license": "UNLICENSED",
+  "main": "truffle-config.js",
+  "scripts": {
+    "test": "truffle test",
+    "start": "truffle compile && truffle deploy",
+    "ganache": "ganache-cli --port 7545 -i 5777"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "files": [
+    "/lib",
+    "package.json",
+    "npm-shrinkwrap"
+  ],
+  "dependencies": {
+    "@uniswap/sdk": "^1.0.0-beta.3",
+    "dotenv": "^8.1.0"
+  },
+  "devDependencies": {
+    "@0x/contracts-utils": "^3.2.1",
+    "@openzeppelin/contracts": "^2.3.0",
+    "babel-eslint": "^10.0.2",
+    "ganache-cli": "^6.5.1",
+    "solc": "^0.5.10",
+    "solhint": "^2.1.2",
+    "truffle": "^5.0.30",
+    "truffle-assertions": "^0.9.1",
+    "truffle-hdwallet-provider": "^1.0.16"
+  }
+}
