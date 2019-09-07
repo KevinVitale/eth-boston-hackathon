@@ -1,5 +1,5 @@
 
-const HDWalletProvider = require("truffle-hdwallet-provider");
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 require("dotenv").config();
 /**
  * Use this file to configure your truffle project. It's seeded with some
@@ -81,7 +81,7 @@ module.exports = {
     
     goerli: {
       provider: function() {
-        return new HDWalletProvider(process.env.MNEMONIC, `https://goerli.infura.io/${process.env.INFURA_KEY}`)
+        return new HDWalletProvider(process.env.MNEMONIC, `https://goerli.infura.io/v3/${process.env.INFURA_KEY}`)
       },
       network_id: 5,
       from: "0x8347291305158bb6FE46757C7BDE7daFBD478456"
@@ -89,9 +89,10 @@ module.exports = {
     },
     ropsten: {
       provider: function() {
-        return new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/${process.env.INFURA_KEY}`)
+        return new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/v3/${process.env.INFURA_KEY}`)
       },
       network_id: 3,
+      from: "0x8347291305158bb6FE46757C7BDE7daFBD478456"
       // gas: 4000000      //make sure this gas allocation isn't over 4M, which is the max
     },
     ganache: {
