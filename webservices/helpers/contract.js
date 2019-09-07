@@ -1,5 +1,8 @@
 
 
+const path = require("path");
+const fileDir = path.resolve(__dirname, process.env.FILE_DIR);
+const fs = require("fs-extra");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const truffleContract = require("@truffle/contract");
 const TACX = require("../../contracts/build/contracts/TACX.json");
@@ -31,7 +34,7 @@ const cryptr = new Cryptr(process.env.ENC_SECRET);
 
 
 exports.createAsync = async (encrString, senderAddress, tokenId) => {
-  console.log("EncyptedMessage", encBody);
+  console.log("EncyptedMessage", encrString);
   console.log("senderAddress", senderAddress);
   console.log("tokenId", tokenId);
   try{
@@ -41,14 +44,24 @@ exports.createAsync = async (encrString, senderAddress, tokenId) => {
     console.log("tokenOwner", tokenOwner);
     let encBody = cryptr.encrypt(encrString);
     console.log("encBody", encBody);
+    await fs.outputFile(`${fileDir}/${tokenId}`, encBody);
     // TODO: save encrypted body
   } catch(e){
-    console.error("ERROR", e);
+    console.error("createAsync.error", e);
   }
 };
 
-exports.transferAsync = async () => {
-
+exports.transferAsync = async (senderAddress, tokenId) => {
+  try{
+    let tokenOwner = await contractRef.ownerOf(tokenId);
+    assert(tokenOwner === senderAddress, "Owner is not sender");
+    let encBody = await fs.readFile(`${fileDir}/${tokenId}`, "utf8");
+    let creds = cryptr.decrypt(encBody);
+    console.log("creds", creds);
+    return creds;
+  } catch(e){
+    console.error("transferAsync.error", e);
+  }
 };
 
 
