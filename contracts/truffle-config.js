@@ -1,7 +1,6 @@
 
 const HDWalletProvider = require("truffle-hdwallet-provider");
 require("dotenv").config();
-
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -79,6 +78,15 @@ module.exports = {
       // network_id: 5777,   // This network is yours, in the cloud.
       // production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    
+    goerli: {
+      provider: function() {
+        return new HDWalletProvider(process.env.MNEMONIC, `https://goerli.infura.io/${process.env.INFURA_KEY}`)
+      },
+      network_id: 5,
+      from: "0x8347291305158bb6FE46757C7BDE7daFBD478456"
+      // gas: 4000000      //make sure this gas allocation isn't over 4M, which is the max
+    },
     ropsten: {
       provider: function() {
         return new HDWalletProvider(process.env.MNEMONIC, `https://ropsten.infura.io/${process.env.INFURA_KEY}`)

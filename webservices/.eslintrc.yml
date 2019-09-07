@@ -1,0 +1,33 @@
+env:
+  browser: true
+  es6: true
+  node: true
+extends: 'eslint:recommended'
+parser: babel-eslint
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+globals:
+  assert: writeable
+  artifacts: writeable
+  web3: writeable
+  it: writeable
+  describe: writeable
+  before: writeable
+  beforeEach: writeable
+  after: writeable
+  afterEach: writeable
+rules:
+  indent:
+    - error
+    - 2
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - double
+  semi:
+    - error
+    - always
+  no-console: 0
