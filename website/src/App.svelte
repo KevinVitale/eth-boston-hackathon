@@ -12,7 +12,7 @@
 	const backend = 'http://localhost:3000';
 	const contractABI = "https://gist.githubusercontent.com/KevinVitale/ab14291d0298fb138aba54d63d2a439c/raw/6e75f651a40ad942e8a59cdc0c8c780c2d79b6b9/LOGN.json";
 
-	const deployedTokenContractAddress = '0x2b00F3A3F535893Ffb21463EB47839Af64AEd12f';
+	const deployedTokenContractAddress = '0x4b2dBDFD9A8d40D8A339b2f39B5833bFf981D297';
 
   //const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/4fd54fedda864aaa820def2e7300d453'));
   const web3 = new Web3(window.ethereum);

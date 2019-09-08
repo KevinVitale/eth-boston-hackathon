@@ -13,7 +13,7 @@
 	const backend = 'http://localhost:3000';
 	const contractABI = "https://gist.githubusercontent.com/KevinVitale/ab14291d0298fb138aba54d63d2a439c/raw/6e75f651a40ad942e8a59cdc0c8c780c2d79b6b9/LOGN.json";
 
-	const deployedTokenContractAddress = '0x2b00F3A3F535893Ffb21463EB47839Af64AEd12f';
+	const deployedTokenContractAddress = '0x4b2dBDFD9A8d40D8A339b2f39B5833bFf981D297';
 
   const web3 = new Web3(window.ethereum);
 
@@ -23,33 +23,26 @@
   })
 
 	async function decrypt() {
-    var submission = `{ "address": "${accounts[0]}", "tokenId": ${ tokenId} }`
-    const signatureHash = await web3.eth.personal.sign(submission, accounts[0]);
+    // var submission = `{ "address": "${accounts[0]}", "tokenId": ${ tokenId} }`
+    var submission = {
+      address: accounts[0],
+      tokenId: Number(tokenId)
+    }
 
-    console.log(submission);
-    console.log(signatureHash);
-
-    var jsonObject = JSON.parse(submission)
-    jsonObject['signature'] = signatureHash;
-    console.log(JSON.stringify(jsonObject));
+    const signatureHash = await web3.eth.personal.sign(JSON.stringify(submission), accounts[0]);
+    submission.signature = signatureHash;
+    console.log("submission", submission);
 
     fetch(backend + '/creds/consume', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', },
-        body: JSON.stringify(jsonObject),
+        body: JSON.stringify(submission),
     })
-    .then((res) => { 
-        if(res.status == 200) {
-          console.log("Success: " + res.statusText);
-        }
-        else if(res.status == 400) {
-          console.log(JSON.stringify(res.json()));
-        }
-        return res.json();
-        })
-    .then((res) => {
-      response = res.creds;
-    });
+    .then(function(response) {
+      return response.json();
+    })
+    // .then(console.log);
+    .then((res) => { response = res.creds; });
 	}
 
 </script>
@@ -108,9 +101,13 @@
 
   .response {
       color: #aaa;
+      background-color: #eff;
+      border: thin dashed gray;
+      font-family: monospace, monospace;
       font-size: 18px;
       font-weight: 300;
-      padding: 10px 20px 20px;
+      padding: 20px;
+      margin: 0px 20px;
   }
 
 </style>
@@ -145,7 +142,7 @@
 
   <hr/>
 
-  <Header title="Token Content:"/>
+  <Header title="TOKEN CONTENT:"/>
   <div class="response">
   {#if !response.length == '0'}
     {response}
