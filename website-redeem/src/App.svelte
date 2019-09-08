@@ -43,10 +43,12 @@
           console.log("Success: " + res.statusText);
         }
         else if(res.status == 400) {
-          console.log(JSON.stringify(res.body.json()));
+          console.log(JSON.stringify(res.json()));
         }
-
-        response = res.json();
+        return res.json();
+        })
+    .then((res) => {
+      response = res.creds;
     });
 	}
 
@@ -144,14 +146,13 @@
   <hr/>
 
   <Header title="Token Content:"/>
-  <hr/>
-
   <div class="response">
   {#if !response.length == '0'}
     {response}
   {/if}
   </div>
 
+  <hr/>
 	<div class="address">
 	{#each accounts as account}
 		{account}
