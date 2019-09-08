@@ -135,6 +135,7 @@
 		</button>
 	</div>
 
+  <hr/>
 	<div class="address">
 	{#each accounts as account}
 		{account}
