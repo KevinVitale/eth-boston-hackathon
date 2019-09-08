@@ -9,10 +9,10 @@
   let projectID = '';
 	let payload = 'This is Kevin';
 	let accounts = [];
-	const backend = 'localhost:8080'
-	const contractABI = "https://gist.githubusercontent.com/KevinVitale/ab14291d0298fb138aba54d63d2a439c/raw/6e75f651a40ad942e8a59cdc0c8c780c2d79b6b9/LOGN.json"
+	const backend = 'localhost:8080';
+	const contractABI = "https://gist.githubusercontent.com/KevinVitale/ab14291d0298fb138aba54d63d2a439c/raw/6e75f651a40ad942e8a59cdc0c8c780c2d79b6b9/LOGN.json";
 
-	const deployedTokenContractAddress = '0x8CD4E85b102D4f5b217927A0192092C56F6F090A'
+	const deployedTokenContractAddress = '0x2b00F3A3F535893Ffb21463EB47839Af64AEd12f';
 
   //const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/4fd54fedda864aaa820def2e7300d453'));
   const web3 = new Web3(window.ethereum);
@@ -31,17 +31,21 @@
     var tokenID = new web3.utils.BN(transactionReceipt.events.Transfer.raw.topics[3].substring(2)).toString()
 
     var submission = `{ "creds": "${payload}", "address": "${accounts[0]}", "tokenId": ${ tokenID} }`
-    console.log(submission)
-    console.log(accounts[0])
-    const signatureHash = await web3.eth.sign(submission, accounts[0]);
+    const signatureHash = await web3.eth.personal.sign(submission, accounts[0]);
 
-    console.log(signatureHash)
+    console.log(submission);
+    console.log(signatureHash);
+
+    var jsonObject = JSON.parse(submission)
+    jsonObject['signature'] = signatureHash;
+    console.log(JSON.stringify(jsonObject));
+
     fetch(backend + '/mint', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(submission + signatureHash),
+            body: JSON.stringify(jsonObject),
         })
 	}
 
