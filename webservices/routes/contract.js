@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs-extra");
 
 router.get("/abi", async function(req, res) {
-  const fileLoc = path.resolve(__dirname, "../../contracts/build/contracts/TACX.json");
+  const fileLoc = path.resolve(__dirname, "../../contracts/build/contracts/LOGN.json");
   let results = await fs.readFile(fileLoc, "utf8");
   let parsedJSON =  JSON.parse(results);
   res.json(

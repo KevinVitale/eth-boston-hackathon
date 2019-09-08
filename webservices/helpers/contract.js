@@ -2,7 +2,7 @@
 
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const truffleContract = require("@truffle/contract");
-const TACX = require("../../contracts/build/contracts/TACX.json");
+const TACX = require("../../contracts/build/contracts/LOGN.json");
 const provider = new HDWalletProvider(process.env.MNEMONIC, `https://${process.env.NETWORK_NAME}.infura.io/v3/${process.env.INFURA_KEY}`, 0, 2);
 const Web3 = require("web3");
 const web3 = new Web3(provider);
@@ -24,13 +24,13 @@ var contract, contractRef;
 })();
 
 
-exports.validateSignature = async (body, signature) => {
+exports.validateSignatureAsync = async (body, signature) => {
   let _tmpBody = {...body};
   delete _tmpBody.signature;
+  console.log("validateSignatureAsync", JSON.stringify(_tmpBody));
   try{
-    const sigResult = web3.eth.accounts.recover(JSON.stringify(_tmpBody), signature);
-    console.log(sigResult);
-    return sigResult;
+    const sigResult = await web3.eth.personal.ecRecover(JSON.stringify(_tmpBody), signature);
+    return (sigResult === body.address);
   } catch(e){
     console.error("validateSignature", e);
     return false;
@@ -38,7 +38,7 @@ exports.validateSignature = async (body, signature) => {
 };
 
 
-exports.validateOwner = async (tokenId, sender) => {
+exports.validateOwnerAsync = async (tokenId, sender) => {
   try{
     let tokenOwner = await contractRef.ownerOf(tokenId);
     return (sender === tokenOwner);
