@@ -1,3 +1,7 @@
+![alt text](
+https://github.com/KevinVitale/eth-boston-hackathon/blob/master/logn-marketplace-promo.png "LOGN Marketplace promo image")
+
+
 # LOGN Marketplace - Buy & Sell Credentials
 Allows credentials to real world services to be transferred in a decentralized and trust-less manner through an Ethereum based dApp.
 
