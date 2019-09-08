@@ -9,7 +9,7 @@
   let projectID = '';
 	let payload = '';
 	let accounts = [];
-	const backend = 'localhost:3000';
+	const backend = 'http://localhost:3000';
 	const contractABI = "https://gist.githubusercontent.com/KevinVitale/ab14291d0298fb138aba54d63d2a439c/raw/6e75f651a40ad942e8a59cdc0c8c780c2d79b6b9/LOGN.json";
 
 	const deployedTokenContractAddress = '0x2b00F3A3F535893Ffb21463EB47839Af64AEd12f';
@@ -29,23 +29,25 @@
     var tokenContract = new web3.eth.Contract(abiJSON.abi, deployedTokenContractAddress)
     var transactionReceipt = await tokenContract.methods.createToken().send({ from: accounts[0], value: 800000 })
     var tokenID = new web3.utils.BN(transactionReceipt.events.Transfer.raw.topics[3].substring(2)).toString()
-
-    var submission = `{ "creds": "${payload}", "address": "${accounts[0]}", "tokenId": ${ tokenID} }`
-    const signatureHash = await web3.eth.personal.sign(submission, accounts[0]);
+    var submission = {
+      creds: payload,
+      address: accounts[0],
+      tokenId: tokenID,
+    }
+    const signatureHash = await web3.eth.personal.sign(JSON.stringify(submission), accounts[0]);
 
     console.log(submission);
     console.log(signatureHash);
 
-    var jsonObject = JSON.parse(submission)
-    jsonObject['signature'] = signatureHash;
-    console.log(JSON.stringify(jsonObject));
+    submission.signature = signatureHash;
 
     fetch(backend + '/creds/create', {
             method: 'POST',
+            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(jsonObject),
+            body: JSON.stringify(submission),
         })
 	}
 
