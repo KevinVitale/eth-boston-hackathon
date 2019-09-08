@@ -1,11 +1,11 @@
 <script>
-  let title = "";
-  let subtitles = ["Redeem A LOGN"];
+  export let title = "";
 </script>
 
 <style>
   .text {
     font-size: 20px;
+    padding: 10px 20px 20px;
   }
 
   .text h1 {
@@ -16,16 +16,13 @@
   }
 
   .text h2 {
-    color: #aaa;
-    font-weight: 300;
+    color: #bbb;
+    font-size: 18px;
+    font-weight: 400;
     line-height: 0.25;
   }
 </style>
 
 <div class="text">
-    <h1>{title}</h1>
-
-    {#each subtitles as subtitle}
-      <h2>{subtitle}</h2>
-    {/each}
+    <h2>{title}</h2>
 </div>

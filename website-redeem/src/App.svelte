@@ -8,6 +8,7 @@
 
   let projectID = '';
 	let tokenId = '';
+  let response = '';
 	let accounts = [];
 	const backend = 'http://localhost:3000';
 	const contractABI = "https://gist.githubusercontent.com/KevinVitale/ab14291d0298fb138aba54d63d2a439c/raw/6e75f651a40ad942e8a59cdc0c8c780c2d79b6b9/LOGN.json";
@@ -33,12 +34,20 @@
     console.log(JSON.stringify(jsonObject));
 
     fetch(backend + '/creds/consume', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(jsonObject),
-        })
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(jsonObject),
+    })
+    .then((res) => { 
+        if(res.status == 200) {
+          console.log("Success: " + res.statusText);
+        }
+        else if(res.status == 400) {
+          console.log(JSON.stringify(res.body.json()));
+        }
+
+        response = res.json();
+    });
 	}
 
 </script>
@@ -95,6 +104,13 @@
     padding: 20px;
 	}
 
+  .response {
+      color: #aaa;
+      font-size: 18px;
+      font-weight: 300;
+      padding: 10px 20px 20px;
+  }
+
 </style>
 
 <body>
@@ -126,6 +142,16 @@
 	</div>
 
   <hr/>
+
+  <Header title="Token Content:"/>
+  <hr/>
+
+  <div class="response">
+  {#if !response.length == '0'}
+    {response}
+  {/if}
+  </div>
+
 	<div class="address">
 	{#each accounts as account}
 		{account}
