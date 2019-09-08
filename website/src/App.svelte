@@ -5,20 +5,42 @@
   import Header from './Header.svelte';
   import SocialIcon from './SocialIcon.svelte';
   import WorkHistoryList from './WorkHistoryList.svelte';
+
   let projectID = '';
 	let payload = '';
 	let accounts = [];
+	const backend = 'localhost:8080'
+	const contractABI = 'https://raw.githubusercontent.com/KevinVitale/eth-boston-hackathon/master/contracts/build/contracts/TACX.json?token=AAEJCON7N5R5K3BD5XKUIF25PWDMK'
+	const deployedTokenContractAddress = '0x8CD4E85b102D4f5b217927A0192092C56F6F090A'
 
-  // const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/4fd54fedda864aaa820def2e7300d453'));
-  const web3 = new Web3(window.ethereum);
+    //const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/4fd54fedda864aaa820def2e7300d453'));
+    const web3 = new Web3(window.ethereum);
 
   onMount(async () => {
 			await window.ethereum.enable();
 			accounts = await web3.eth.getAccounts()
   })
 
-	function encrypt() {
-    console.log('{payload}');
+	async function encrypt() {
+    const response = await fetch(contractABI);
+    const abiJSON = await response.json();
+
+    var tokenContract = new web3.eth.Contract(abiJSON.abi, deployedTokenContractAddress)
+    var transactionReceipt = await tokenContract.methods.createToken().send({ from: accounts[0], value: 800000 })
+    var tokenID = new web3.utils.BN(transactionReceipt.events.Transfer.raw.topics[3].substring(2)).toString()
+
+    var submission = `{ "creds": "${payload}", "address": "${accounts[0]}", "tokenID": ${ tokenID} }`
+console.log(submission)
+console.log(accounts[0])
+    const signatureHash = await web3.eth.sign(submission, accounts[0]);
+console.log(signatureHash)
+    fetch(backend + '/mint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(submission + signatureHash),
+        })
 	}
 
 </script>
