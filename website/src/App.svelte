@@ -7,14 +7,15 @@
   import WorkHistoryList from './WorkHistoryList.svelte';
 
   let projectID = '';
-	let payload = '';
+	let payload = 'This is Kevin';
 	let accounts = [];
 	const backend = 'localhost:8080'
-	const contractABI = 'https://raw.githubusercontent.com/KevinVitale/eth-boston-hackathon/master/contracts/build/contracts/TACX.json?token=AAEJCON7N5R5K3BD5XKUIF25PWDMK'
+	const contractABI = "https://gist.githubusercontent.com/KevinVitale/ab14291d0298fb138aba54d63d2a439c/raw/6e75f651a40ad942e8a59cdc0c8c780c2d79b6b9/LOGN.json"
+
 	const deployedTokenContractAddress = '0x8CD4E85b102D4f5b217927A0192092C56F6F090A'
 
-    //const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/4fd54fedda864aaa820def2e7300d453'));
-    const web3 = new Web3(window.ethereum);
+  //const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/4fd54fedda864aaa820def2e7300d453'));
+  const web3 = new Web3(window.ethereum);
 
   onMount(async () => {
 			await window.ethereum.enable();
@@ -29,11 +30,12 @@
     var transactionReceipt = await tokenContract.methods.createToken().send({ from: accounts[0], value: 800000 })
     var tokenID = new web3.utils.BN(transactionReceipt.events.Transfer.raw.topics[3].substring(2)).toString()
 
-    var submission = `{ "creds": "${payload}", "address": "${accounts[0]}", "tokenID": ${ tokenID} }`
-console.log(submission)
-console.log(accounts[0])
+    var submission = `{ "creds": "${payload}", "address": "${accounts[0]}", "tokenId": ${ tokenID} }`
+    console.log(submission)
+    console.log(accounts[0])
     const signatureHash = await web3.eth.sign(submission, accounts[0]);
-console.log(signatureHash)
+
+    console.log(signatureHash)
     fetch(backend + '/mint', {
             method: 'POST',
             headers: {
