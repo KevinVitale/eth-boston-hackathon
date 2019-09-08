@@ -1,5 +1,5 @@
-const TACX = artifacts.require("TACX");
+const LOGN = artifacts.require("LOGN");
 
 module.exports = function(deployer) {
-  deployer.deploy(TACX, 400000);
+  deployer.deploy(LOGN, 400000);
 };

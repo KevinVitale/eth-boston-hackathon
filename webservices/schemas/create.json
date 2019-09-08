@@ -1,0 +1,54 @@
+{
+  "definitions": {
+
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "LOGN Schema",
+  "required": [
+    "creds",
+    "address",
+    "tokenID"
+  ],
+  "properties": {
+    "creds": {
+      "$id": "#/properties/creds",
+      "type": "string",
+      "title": "Creds Schema",
+      "default": "",
+      "examples": [
+        "andrew:washere"
+      ]
+    },
+    "address": {
+      "$id": "#/properties/address",
+      "type": "string",
+      "title": "Creator wallet address",
+      "default": "",
+      "examples": [
+        "0x8347291305158bb6FE46757C7BDE7daFBD478456"
+      ],
+      "pattern": "^0x[a-fA-F0-9]{40}$"
+    },
+    "tokenID": {
+      "$id": "#/properties/tokenID",
+      "type": "integer",
+      "title": "721 Token ID",
+      "default": 0,
+      "examples": [
+        1234
+      ]
+    },
+    "signature": {
+      "$id": "#/properties/address",
+      "type": "string",
+      "title": "Signature of payload",
+      "default": "",
+      "examples": [
+        "0x8347291305158bb6FE46757C7BDE7daFBD478sdfklasjfkdsaj456"
+      ],
+      "pattern": "^0[xX][0-9A-Fa-f]{64}$"
+    }
+  }
+}

@@ -1,8 +1,5 @@
 
 
-const path = require("path");
-const fileDir = path.resolve(__dirname, process.env.FILE_DIR);
-const fs = require("fs-extra");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const truffleContract = require("@truffle/contract");
 const TACX = require("../../contracts/build/contracts/TACX.json");
@@ -13,12 +10,6 @@ const [owner, fees] = provider.addresses;
 // web3.eth.setProvider(provider);
 var contract, contractRef;
 
-const Cryptr = require("cryptr");
-const cryptr = new Cryptr(process.env.ENC_SECRET);
-
-
-
-// Or, if web3 is alreay initialized, you can call the "setProvider' on web3, web3.eth, web3.shh and/or web3.bzz
 
 (async () => {
   contract = truffleContract(TACX);
@@ -33,43 +24,26 @@ const cryptr = new Cryptr(process.env.ENC_SECRET);
 })();
 
 
-exports.createAsync = async (encrString, senderAddress, tokenId) => {
-  console.log("EncyptedMessage", encrString);
-  console.log("senderAddress", senderAddress);
-  console.log("tokenId", tokenId);
+exports.validateSignature = async (body, signature) => {
+  let _tmpBody = {...body};
+  delete _tmpBody.signature;
   try{
-    // senderAddress
-    let tokenOwner = await contractRef.ownerOf(tokenId);
-    assert(tokenOwner === senderAddress, "Owner is not sender");
-    console.log("tokenOwner", tokenOwner);
-    let encBody = cryptr.encrypt(encrString);
-    console.log("encBody", encBody);
-    await fs.outputFile(`${fileDir}/${tokenId}`, encBody);
-    // TODO: save encrypted body
+    const sigResult = web3.eth.accounts.recover(JSON.stringify(_tmpBody), signature);
+    console.log(sigResult);
+    return sigResult;
   } catch(e){
-    console.error("createAsync.error", e);
-  }
-};
-
-exports.transferAsync = async (senderAddress, tokenId) => {
-  try{
-    let tokenOwner = await contractRef.ownerOf(tokenId);
-    assert(tokenOwner === senderAddress, "Owner is not sender");
-    let encBody = await fs.readFile(`${fileDir}/${tokenId}`, "utf8");
-    let creds = cryptr.decrypt(encBody);
-    console.log("creds", creds);
-    return creds;
-  } catch(e){
-    console.error("transferAsync.error", e);
+    console.error("validateSignature", e);
+    return false;
   }
 };
 
 
-// const Cryptr = require("cryptr");
-// const cryptr = new Cryptr("myTotalySecretKey");
- 
-// const encryptedString = cryptr.encrypt("bacon");
-// const decryptedString = cryptr.decrypt(encryptedString);
- 
-// console.log(encryptedString); // 5590fd6409be2494de0226f5d7
-// console.log(decryptedString); // bac
+exports.validateOwner = async (tokenId, sender) => {
+  try{
+    let tokenOwner = await contractRef.ownerOf(tokenId);
+    return (sender === tokenOwner);
+  } catch(e){
+    console.error("validateOwner", e);
+    return false;
+  }
+};
