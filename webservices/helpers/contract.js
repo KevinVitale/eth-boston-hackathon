@@ -41,7 +41,7 @@ exports.validateSignatureAsync = async (body, signature) => {
 
 exports.validateOwnerAsync = async (tokenId, sender) => {
   try{
-    let tokenOwner = await contractRef.ownerOf(Number(tokenId));
+    let tokenOwner = await contractRef.ownerOf(tokenId);
     console.log("sender", sender.toString());
     console.log("tokenOwner", tokenOwner.toString());
     return (sender.toString().toLowerCase() == tokenOwner.toString().toLowerCase());
