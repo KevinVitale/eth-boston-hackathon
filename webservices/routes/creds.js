@@ -5,9 +5,6 @@ const contract = require("../helpers/contract");
 const files = require("../helpers/credFiles");
 
 
-// router.get("/", function(req, res) {
-//   res.send(200);
-// });
 router.post("/create", async function(req, res) {
   console.log("create.req.body", req.body)
   try {

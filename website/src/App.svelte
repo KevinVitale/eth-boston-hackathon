@@ -25,21 +25,18 @@
 	async function encrypt() {
     const response = await fetch(contractABI);
     const abiJSON = await response.json();
-
     var tokenContract = new web3.eth.Contract(abiJSON.abi, deployedTokenContractAddress)
     var transactionReceipt = await tokenContract.methods.createToken().send({ from: accounts[0], value: 800000 })
     var tokenID = new web3.utils.BN(transactionReceipt.events.Transfer.raw.topics[3].substring(2)).toString()
     var submission = {
       creds: payload,
       address: accounts[0],
-      tokenId: tokenID,
+      tokenId: Number(tokenID)
     }
+
     const signatureHash = await web3.eth.personal.sign(JSON.stringify(submission), accounts[0]);
-
-    console.log(submission);
-    console.log(signatureHash);
-
     submission.signature = signatureHash;
+    console.log("submission", submission);
 
     fetch(backend + '/creds/create', {
             method: 'POST',

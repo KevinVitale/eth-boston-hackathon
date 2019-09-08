@@ -27,10 +27,11 @@ var contract, contractRef;
 exports.validateSignatureAsync = async (body, signature) => {
   let _tmpBody = {...body};
   delete _tmpBody.signature;
-  console.log("validateSignatureAsync", JSON.stringify(_tmpBody));
   try{
     const sigResult = await web3.eth.personal.ecRecover(JSON.stringify(_tmpBody), signature);
-    return (sigResult === body.address);
+    console.log("sigResult", sigResult.toString().toLowerCase());
+    console.log("address", body.address.toString().toLowerCase());
+    return (sigResult.toString().toLowerCase() == body.address.toString().toLowerCase());
   } catch(e){
     console.error("validateSignature", e);
     return false;
@@ -40,8 +41,10 @@ exports.validateSignatureAsync = async (body, signature) => {
 
 exports.validateOwnerAsync = async (tokenId, sender) => {
   try{
-    let tokenOwner = await contractRef.ownerOf(tokenId);
-    return (sender === tokenOwner);
+    let tokenOwner = await contractRef.ownerOf(Number(tokenId));
+    console.log("sender", sender.toString());
+    console.log("tokenOwner", tokenOwner.toString());
+    return (sender.toString().toLowerCase() == tokenOwner.toString().toLowerCase());
   } catch(e){
     console.error("validateOwner", e);
     return false;
