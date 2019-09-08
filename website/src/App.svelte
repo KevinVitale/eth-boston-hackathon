@@ -7,9 +7,9 @@
   import WorkHistoryList from './WorkHistoryList.svelte';
 
   let projectID = '';
-	let payload = 'This is Kevin';
+	let payload = '';
 	let accounts = [];
-	const backend = 'localhost:8080';
+	const backend = 'localhost:3000';
 	const contractABI = "https://gist.githubusercontent.com/KevinVitale/ab14291d0298fb138aba54d63d2a439c/raw/6e75f651a40ad942e8a59cdc0c8c780c2d79b6b9/LOGN.json";
 
 	const deployedTokenContractAddress = '0x2b00F3A3F535893Ffb21463EB47839Af64AEd12f';
@@ -40,7 +40,7 @@
     jsonObject['signature'] = signatureHash;
     console.log(JSON.stringify(jsonObject));
 
-    fetch(backend + '/mint', {
+    fetch(backend + '/creds/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
